@@ -1,35 +1,53 @@
-var express = require("express")
+const express = require("express");
 const path = require('path');
-var app = express()
-var port = process.env.port || 3000;
+const app = express();
+const port = process.env.PORT || 3000;
 
-// Middleware to parse JSON bodies (for POST requests)
+// Middleware to parse JSON
 app.use(express.json());
 
-// Serve static files from the "public" folder
+// Serve static files from "public"
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
-app.post('/api/addition', (req, res) => {
-  const { number1, number2 } = req.body;
+// API route to handle calculator operations
+app.post('/api/calculate', (req, res) => {
+  const { number1, number2, operation } = req.body;
 
   if (typeof number1 !== 'number' || typeof number2 !== 'number') {
-    return res.status(400).json({ error: 'Only numbers are allowed!!' });
+    return res.status(400).json({ error: 'Inputs must be numbers.' });
   }
 
-  const sum = number1 + number2;
-  res.json({ sum });
+  let result;
+
+  switch (operation) {
+    case 'add':
+      result = number1 + number2;
+      break;
+    case 'subtract':
+      result = number1 - number2;
+      break;
+    case 'multiply':
+      result = number1 * number2;
+      break;
+    case 'divide':
+      if (number2 === 0) {
+        return res.status(400).json({ error: 'Cannot divide by zero.' });
+      }
+      result = number1 / number2;
+      break;
+    default:
+      return res.status(400).json({ error: 'Invalid operation type.' });
+  }
+
+  res.json({ result });
 });
 
-
-// Additional example endpoint to check server health
+// Health check
 app.get('/health', (req, res) => {
   res.send('Server is healthy!');
 });
 
-
+// Start server
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
-

@@ -2,59 +2,101 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Operations of Numbers using API</title>
+  <title>Calculator App</title>
   <style>
-    body{
+    body {
       background-color: lightblue;
       color: red;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
-    #result{
-        padding: 3px;
-        border: 1px solid black;
-        display: none;
-        width: fit-content;
-       
+
+    .container {
+      text-align: center;
+      background-color: #ffffffcc;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    input, select, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 200px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: red;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #result {
+      padding: 10px;
+      border: 1px solid black;
+      display: none;
+      background-color: white;
+      color: black;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-    <h1>Levin's Summation of Numbers</h1>
-  <form action="" id="addition">
-    <label >Enter first number: </label>
-    <input type="number" id="number1"><br> <br>
-    <label >Enter second number</label>
-    <input type="number" id="number2"><br> <br>
-    <button type="submit">Add</button>
-  </form>
-  <p id="result"></p>
+  <div class="container">
+    <h1>Levin's Basic Calculator</h1>
+    <form id="calculator">
+      <label >Enter first number: </label>
+      <input type="number" id="number1" ><br>
+      <label >Enter second number:</label>
+      <input type="number" id="number2" ><br>
+      <select id="operation" required>
+        <option value="add">Addition (+)</option>
+        <option value="subtract">Subtraction (-)</option>
+        <option value="multiply">Multiplication (×)</option>
+        <option value="divide">Division (÷)</option>
+      </select><br>
+      <button type="submit">Calculate</button>
+    </form>
+    <p id="result"></p>
+  </div>
 
   <script>
-    document.getElementById('addition').addEventListener('submit', function(event) {
-      event.preventDefault(); 
-  
-      const number1 = parseInt(document.getElementById('number1').value);
-      const number2 = parseInt(document.getElementById('number2').value);
-      
-      
-      fetch('/api/addition', {
+    document.getElementById('calculator').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const number1 = parseFloat(document.getElementById('number1').value);
+      const number2 = parseFloat(document.getElementById('number2').value);
+      const operation = document.getElementById('operation').value;
+      const resultBox = document.getElementById('result');
+
+      fetch('/api/calculate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ number1, number2 })
+        body: JSON.stringify({ number1, number2, operation })
       })
       .then(response => response.json())
       .then(data => {
-        document.getElementById('result').innerText = `${number1} + ${number2} = ${data.sum}`;
-        document.getElementById('result').style.display = 'block';
+        if (data.error) {
+          resultBox.innerText = `Error: ${data.error}`;
+        } else {
+          resultBox.innerText = `Result: ${data.result}`;
+        }
+        resultBox.style.display = 'block';
       })
       .catch(error => {
-        console.error('Error fetching sum:', error);
-        document.getElementById('result').innerText = 'Error fetching sum.';
-        document.getElementById('result').style.display = 'block';
+        console.error('Error:', error);
+        resultBox.innerText = 'An error occurred while calculating.';
+        resultBox.style.display = 'block';
       });
     });
   </script>
-  
 </body>
 </html>
