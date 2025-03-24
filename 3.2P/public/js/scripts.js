@@ -9,7 +9,7 @@ const cardList = [
         title: "Mango",
         image: "images/Mango.jpg",
         link: "About Mango",
-        description: "A mango nakes it sweet."
+        description: "A mango is very refereshing."
     }
 ];
 
