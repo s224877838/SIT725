@@ -44,6 +44,15 @@ const addSampleProject = async () => {
     });
     await sampleRabbitProject.save();
     console.log("Rabbit project saved!");
+
+    const sampleCatProject = new Project({
+      title: "Cat",
+      image: "images/cat.jpg",
+      link: "About cats",
+      description: "Cats are adorable and quiet!",
+    });
+    await sampleCatProject.save();
+    console.log("Cat project saved!");
   } catch (err) {
     console.error("Error adding sample projects:", err);
   }
