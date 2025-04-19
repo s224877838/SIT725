@@ -4,7 +4,6 @@ const app = express();
 
 app.use(bodyParser.json());
 
-// Sample routes
 app.get('/', (req, res) => {
   res.status(200).send('Welcome to the homepage!');
 });
@@ -21,7 +20,6 @@ app.post('/api/submitForm', (req, res) => {
   res.status(200).json({ message: 'Form submitted successfully' });
 });
 
-// Start server if not in test
 if (require.main === module) {
   const port = process.env.PORT || 3000;
   app.listen(port, () => {
@@ -29,4 +27,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = app; // Export for testing
+module.exports = app; 

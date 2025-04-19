@@ -20,7 +20,7 @@ describe('API Tests', () => {
   it('should fail when POST data is incomplete', (done) => {
     request(app)
       .post('/api/submitForm')
-      .send({ first_name: 'John' }) // missing fields
+      .send({ first_name: 'John' }) 
       .expect(500)
       .end(done);
   });
